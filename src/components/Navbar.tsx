@@ -19,13 +19,22 @@ export const Navbar = () => {
             onClick={onClickHome}
             className="cursor-pointer icon-left text-4xl text-H_green bg-H_white rounded-3xl border-H_green border-2"
           />
-          <button
-            onClick={onClickLogin}
-            className="flex flex-row-reverse bg-white border-H_green border-4 rounded-xl px-2 "
-          >
-            <p className=" text-H_text text-2xl font-serif">Iniciar sesión</p>
-            <TiLeaf className="m-1 text-2xl text-H_text" />
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={onClickLogin}
+              className="flex flex-row-reverse bg-white border-H_green border-4 rounded-xl px-4 "
+            >
+              <p className=" text-H_text text-2xl font-serif">Login</p>
+              <TiLeaf className="my-1 text-2xl text-H_text" />
+            </button>
+            <button
+              onClick={onClickLogin}
+              className="flex flex-row-reverse bg-white border-H_green border-4 rounded-xl px-4 "
+            >
+              <p className=" text-H_text text-2xl font-serif">Sign in</p>
+              <TiLeaf className="my-1 text-2xl text-H_text" />
+            </button>
+          </div>
         </div>
       </div>
     </>
