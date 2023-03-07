@@ -11,7 +11,7 @@ interface Props {
 
 export const InputText: FC<Props> = ({ ...props }) => {
   const { name, label } = props;
-  const [field] = useField(name);
+  const [field, meta] = useField(name);
   return (
     <div>
       <label
