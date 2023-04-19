@@ -1,21 +1,37 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { InputText } from "../../components/InputText";
 import { inputFieldsLogin } from "../../data/inputFields";
+import { useAuthStore } from "../../hooks/useAuthStore";
+import { useLoginMutation } from "../../store/api/auth.api";
+import { login } from "../../store/auth/authSlice";
+import { AppDispatch } from "../../store/store";
+export interface UserCredentials {
+  email: string;
+  password: string;
+}
 
-export const Login = () => {
+export const LoginPage = () => {
   const navigate = useNavigate();
   const onClickForgotPassword = () => {
     navigate("/recovery");
   };
+  const dispatch = useDispatch();
+  // const [onLogin, { data: dataLogin }] = useLoginMutation();
+  // console.log(dataLogin);
+  const { startLogin } = useAuthStore();
+  console.log(import.meta.env.VITE_API_URL);
+
   return (
-    <div className="rounded-lg border-2 px-6 py-4 border-gray-200 w-2/4">
+    <div className="rounded-lg border-2 px-6 py-4 border-gray-200 w-2/5 shadow-lg">
       <h1 className="block mb-2 text-2xl font-medium text-label">LOGIN</h1>
       <Formik
         initialValues={{ email: "", password: "" }}
-        onSubmit={(values) => {
-          console.log(values);
+        onSubmit={async (values) => {
+          await startLogin(values);
+          // await startLogin(values);
         }}
         validationSchema={Yup.object({
           email: Yup.string()
@@ -27,7 +43,7 @@ export const Login = () => {
             .max(20, "Password must be less than 20 characters"),
         })}
       >
-        {(formik: any) => (
+        {() => (
           <Form>
             <div className="flex-row space-y-4">
               {inputFieldsLogin.map((inputField) => (
@@ -46,7 +62,7 @@ export const Login = () => {
                     navigate("/register");
                   }}
                 >
-                  don't have an account?
+                  Don't have an account?
                 </p>
               </div>
               <button
@@ -54,7 +70,7 @@ export const Login = () => {
                 className="bg-gray-200 group relative h-12 w-full overflow-hidden rounded-lg text-lg shadow"
               >
                 <div className="absolute inset-0 w-3 bg-H_green transition-all duration-[250ms] ease-out group-hover:w-full"></div>
-                <span className="relative text-black group-hover:text-white">
+                <span className="relative text-H_brown group-hover:text-white">
                   Login
                 </span>
               </button>

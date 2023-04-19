@@ -2,14 +2,18 @@ import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { HiArrowSmDown } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
+import { useUploadImageMutation } from "../store/api/plant.api";
 
 export const CustomDropzone = () => {
-  const [uploadFile, setUploadFile] = useState<File | {}>({});
+  const [uploadFile, setUploadFile] = useState<File>();
+
   const navigate = useNavigate();
   const [previewImage, setPreviewImage] = useState({
     preview: "",
     path: "",
   });
+  const [uploadImage, { isLoading, isSuccess, isError, error }] =
+    useUploadImageMutation();
 
   const onDrop = (acceptedFiles: File[]) => {
     setUploadFile(acceptedFiles[0]);
@@ -27,6 +31,15 @@ export const CustomDropzone = () => {
       },
       maxFiles: 1,
     });
+
+  const onClickDiagnose = async (file: File | undefined) => {
+    if (file) {
+      localStorage.setItem("imgURL", URL.createObjectURL(file));
+      const url = await uploadImage(file);
+      navigate(`/result`);
+      console.log(url);
+    }
+  };
 
   const onDragActive = () => {
     return (
@@ -72,12 +85,6 @@ export const CustomDropzone = () => {
         </button>
       </>
     );
-  };
-
-  const onClickDiagnose = (file: File | {}) => {
-    console.log(file);
-    localStorage.setItem("imgURL", previewImage.preview);
-    navigate("/result");
   };
 
   return (

@@ -1,13 +1,13 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { InputText } from "../../components/InputText";
-import { inputFieldsLogin, inputFieldsRegister } from "../../data/inputFields";
+import { inputFieldsRegister } from "../../data/inputFields";
 
 export const RegisterPage = () => {
   const navigate = useNavigate();
   return (
-    <div className="rounded-lg border-2 px-6 py-4 border-gray-200 w-2/4">
+    <div className="rounded-lg border-2 px-6 py-4 border-gray-200 w-2/5">
       <h1 className="block mb-2 text-2xl font-medium text-label">
         CREATE ACCOUNT
       </h1>
@@ -30,7 +30,7 @@ export const RegisterPage = () => {
           password: Yup.string()
             .required("Password is required")
             .min(6, "Password must be at least 6 characters")
-            .max(20, "Password must be less than 20 characters"),
+            .max(15, "Password must be less than 15 characters"),
         })}
       >
         {() => (
@@ -43,7 +43,7 @@ export const RegisterPage = () => {
                 <p
                   className="cursor-pointer underline text-blue-800"
                   onClick={() => {
-                    navigate(-1);
+                    navigate("/login");
                   }}
                 >
                   I have an account

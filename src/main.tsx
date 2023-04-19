@@ -7,11 +7,9 @@ import { RouterApp } from "./router/RouterApp";
 import { store } from "./store/store";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Provider store={store}>
-        <RouterApp />
-      </Provider>
-    </BrowserRouter>
-  </React.StrictMode>
+  <BrowserRouter>
+    <Provider store={store}>
+      <RouterApp />
+    </Provider>
+  </BrowserRouter>
 );

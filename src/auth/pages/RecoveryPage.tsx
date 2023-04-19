@@ -1,21 +1,17 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
+import { IoChevronBackCircle } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { InputText } from "../../components/InputText";
-import { IoChevronBackCircle } from "react-icons/io5";
-import {
-  inputFieldsForgotPassword,
-  inputFieldsLogin,
-  inputFieldsRegister,
-} from "../../data/inputFields";
+import { inputFieldsForgotPassword } from "../../data/inputFields";
 
 export const RecoveryPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="rounded-lg border-2 px-6 py-4 border-gray-200 w-2/4">
+    <div className="rounded-lg border-2 px-6 py-4 border-gray-200 w-2/5">
       <IoChevronBackCircle
-        className="text-3xl cursor-pointer"
+        className="text-3xl text-H_green cursor-pointer mb-3"
         onClick={() => navigate(-1)}
       />
       <h1 className="block mb-2 text-2xl font-medium text-label">
