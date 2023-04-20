@@ -8,19 +8,17 @@ import { useGetResultQuery } from "../store/api/plant.api";
 export const ResultPage = () => {
   const { user } = useAuthStore();
   const [readMore, setReadMore] = useState(false);
-  const image = localStorage.getItem("imgURL");
+  const image = localStorage.getItem("imgURL") ?? "";
   const [isPolling, setIsPolling] = useState(true);
   const [isTimeout, setIsTimeout] = useState(false);
 
   const { data } = useGetResultQuery(
-    "214313e7-100b-4298-9b2f-91c68da141f9.jpg",
-    {
-      pollingInterval: isPolling ? 1000 : undefined,
-    }
+    "214313e7-100b-4298-9b2f-91c68da141f.jpg",
+    { pollingInterval: isPolling ? 1000 : undefined }
   );
   const { result } = data ?? {};
 
-  console.log(import.meta.env.VITE_API_URL);
+  console.log(result);
 
   useEffect(() => {
     if (result && result.accuracy !== null) setIsPolling(false);
@@ -55,7 +53,7 @@ export const ResultPage = () => {
 
   if (isPolling) return <Spinner />;
 
-  isTimeout && notFoundResult();
+  if (isTimeout) return notFoundResult();
 
   return (
     <div className="w-full p-10">
@@ -63,17 +61,25 @@ export const ResultPage = () => {
         Hi {user?.username}, this is your result:
       </h1>
       <div className="flex flex-col justify-center items-center">
-        <img
-          className="w-1/3 h-96 border-2 rounded-3xl mb-4"
-          src={image ?? ""}
-          alt=""
-        />
+        <img className=" border-2 rounded-3xl mb-4" src={image ?? ""} alt="" />
         <hr className="bg-H_green h-[2px] w-9/12 rounded-full" />
         <div className="flex flex-col justify-center mt-6 mb-3">
           <h1 className="text-4xl font-bold mb-2 text-H_green">
-            Dactylopius coccus
+            {result?.sickness.replaceAll("_", " ") ?? ""}
           </h1>
-          <p className="text-lg text-H_brown text-center"></p>
+          <p
+            className={`text-lg text-H_brown text-center ${
+              readMore ? "" : "line-clamp-3"
+            }`}
+          >
+            Sit do amet id pariatur commodo. Pariatur esse Lorem elit eu
+            incididunt cillum culpa aliqua ipsum est. Non elit dolor nisi Lorem
+            laboris excepteur commodo ea mollit in officia incididunt fugiat.
+            Consectetur irure consectetur officia in quis incididunt quis
+            incididunt aliquip incididunt nostrud magna fugiat commodo. Proident
+            est duis ea laborum. Dolore nostrud et cillum sint id dolore et quis
+            aliquip eiusmod esse magna laborum incididunt.
+          </p>
           <div className="flex justify-center py-2">
             {readMore ? (
               <div

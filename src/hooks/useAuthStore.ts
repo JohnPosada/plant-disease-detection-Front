@@ -35,14 +35,14 @@ export const useAuthStore = () => {
 
   const startLogin = async ({ email, password }: LoginUserCredentials) => {
     await onLogin({ email, password });
-    const { token, user } = dataLogin || {};
+    const { token, user } = dataLogin ?? {};
     console.log(user);
 
     if (user && token) {
       localStorage.setItem("token", token);
       return dispatch(login(user));
     }
-    return dispatch(loginError(errorLogin || "Error"));
+    return dispatch(loginError(errorLogin ?? "Error"));
   };
 
   const startRegister = async ({
@@ -51,7 +51,7 @@ export const useAuthStore = () => {
     password,
   }: createUserCredentials) => {
     await onRegister({ email, username, password });
-    const { token, user } = dataRegister || {};
+    const { token, user } = dataRegister ?? {};
 
     if (user && token) {
       localStorage.setItem("token", token);

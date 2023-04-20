@@ -16,8 +16,8 @@ const initialState: AuthSlice = {
   status: "authenticated",
   user: {
     id: "",
-    username: "",
-    email: "",
+    username: "x",
+    email: "x@gmail.com",
   },
   errorMessage: null,
 };
