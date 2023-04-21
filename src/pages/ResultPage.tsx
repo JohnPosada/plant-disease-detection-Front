@@ -13,7 +13,7 @@ export const ResultPage = () => {
   const [isTimeout, setIsTimeout] = useState(false);
 
   const { data } = useGetResultQuery(
-    "214313e7-100b-4298-9b2f-91c68da141f.jpg",
+    "214313e7-100b-4298-9b2f-91c68da141f9.jpg",
     { pollingInterval: isPolling ? 1000 : undefined }
   );
   const { result } = data ?? {};
@@ -22,11 +22,13 @@ export const ResultPage = () => {
 
   useEffect(() => {
     if (result && result.accuracy !== null) setIsPolling(false);
+
     setTimeout(() => {
       setIsPolling(false);
-      setIsTimeout(true);
     }, 10000);
   }, [result]);
+
+  if (!setIsPolling && result && result.accuracy !== null) setIsTimeout(true);
 
   const handleReadMore = () => {
     setReadMore(!readMore);

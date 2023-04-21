@@ -32,6 +32,11 @@ export const useAuthStore = () => {
 
   // const [onRecovery, { isLoading: isLoadingRecovery, error: errorRecovery }] =
   //   useRecoveryMutation();
+  const checkAuth = () => {
+    const token = localStorage.getItem("token");
+    if (!token) return dispatch(logout());
+    return dispatch(login({ username: "", email: "" }));
+  };
 
   const startLogin = async ({ email, password }: LoginUserCredentials) => {
     await onLogin({ email, password });
@@ -65,5 +70,13 @@ export const useAuthStore = () => {
     dispatch(logout());
   };
 
-  return { status, user, errorMessage, startLogin, startRegister, startLogout };
+  return {
+    checkAuth,
+    status,
+    user,
+    errorMessage,
+    startLogin,
+    startRegister,
+    startLogout,
+  };
 };

@@ -11,7 +11,7 @@ export const Navbar = () => {
 
   const navigation = useNavigate();
   const dispatch = useDispatch();
-  const { status } = useAuthStore();
+  const { status, startLogout } = useAuthStore();
   const { pathname } = useLocation();
 
   const onClickUser = () => {
