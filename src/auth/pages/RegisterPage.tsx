@@ -3,9 +3,24 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { InputText } from "../../components/InputText";
 import { inputFieldsRegister } from "../../data/inputFields";
+import { useRegisterMutation } from "../../store/api/auth.api";
+import { createUserCredentials, useAuthStore } from "../../hooks/useAuthStore";
+import { Spinner } from "../../components/Spinner";
 
 export const RegisterPage = () => {
+  const [onRegister, { isLoading }] = useRegisterMutation();
+  const { startLogin } = useAuthStore();
   const navigate = useNavigate();
+  const onClickRegister = async (values: createUserCredentials) => {
+    try {
+      const { token } = await onRegister(values).unwrap();
+
+      startLogin(token);
+    } catch (error) {}
+  };
+
+  if (isLoading) return <Spinner />;
+
   return (
     <div className="rounded-lg border-2 px-6 py-4 border-gray-200 w-2/5">
       <h1 className="block mb-2 text-2xl font-medium text-label">
@@ -18,7 +33,7 @@ export const RegisterPage = () => {
           password: "",
         }}
         onSubmit={(values) => {
-          console.log(values);
+          onClickRegister(values);
         }}
         validationSchema={Yup.object({
           username: Yup.string().required("Email is required"),

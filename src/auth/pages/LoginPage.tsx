@@ -1,13 +1,12 @@
 import { Form, Formik } from "formik";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { InputText } from "../../components/InputText";
 import { inputFieldsLogin } from "../../data/inputFields";
 import { useAuthStore } from "../../hooks/useAuthStore";
 import { useLoginMutation } from "../../store/api/auth.api";
-import { login } from "../../store/auth/authSlice";
-import { AppDispatch } from "../../store/store";
+import { Spinner } from "../../components/Spinner";
+import { useEffect, useState } from "react";
 export interface UserCredentials {
   email: string;
   password: string;
@@ -15,14 +14,33 @@ export interface UserCredentials {
 
 export const LoginPage = () => {
   const navigate = useNavigate();
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const onClickForgotPassword = () => {
     navigate("/recovery");
   };
-  const dispatch = useDispatch();
-  // const [onLogin, { data: dataLogin }] = useLoginMutation();
-  // console.log(dataLogin);
-  const { startLogin } = useAuthStore();
-  console.log(import.meta.env.VITE_API_URL);
+  const { startLogin, startLoginError, errorMessage } = useAuthStore();
+  const [onLogin, { isLoading }] = useLoginMutation();
+
+  const onClickLogin = async (values: UserCredentials) => {
+    try {
+      const { token } = await onLogin(values).unwrap();
+      startLogin(token);
+    } catch (error: any) {
+      startLoginError(error.data.error);
+      setShowErrorMessage(true);
+    }
+  };
+
+  useEffect(() => {
+    if (errorMessage) {
+      setTimeout(() => {
+        setShowErrorMessage(false);
+        startLoginError("");
+      }, 3000);
+    }
+  }, [errorMessage]);
+
+  if (isLoading) return <Spinner />;
 
   return (
     <div className="rounded-lg border-2 px-6 py-4 border-gray-200 w-2/5 shadow-lg">
@@ -30,8 +48,7 @@ export const LoginPage = () => {
       <Formik
         initialValues={{ email: "", password: "" }}
         onSubmit={async (values) => {
-          await startLogin(values);
-          // await startLogin(values);
+          await onClickLogin(values);
         }}
         validationSchema={Yup.object({
           email: Yup.string()
@@ -65,6 +82,9 @@ export const LoginPage = () => {
                   Don't have an account?
                 </p>
               </div>
+              {showErrorMessage && (
+                <span className="text-red-500">{errorMessage}</span>
+              )}
               <button
                 type="submit"
                 className="bg-gray-200 group relative h-12 w-full overflow-hidden rounded-lg text-lg shadow"

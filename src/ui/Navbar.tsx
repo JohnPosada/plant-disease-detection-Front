@@ -10,7 +10,6 @@ export const Navbar = () => {
   const refNavbar = useRef<HTMLDivElement>(null);
 
   const navigation = useNavigate();
-  const dispatch = useDispatch();
   const { status, startLogout } = useAuthStore();
   const { pathname } = useLocation();
 
@@ -55,8 +54,8 @@ export const Navbar = () => {
             to="/"
             className="text-gray-700 block px-4 py-2 text-lg"
             onClick={() => {
-              dispatch(logout());
-              navigation("/");
+              startLogout();
+              onClickUser();
             }}
           >
             Sign out
@@ -107,11 +106,8 @@ export const Navbar = () => {
             )}
             {status === "authenticated" && (
               <>
-                <div
-                  ref={refNavbar}
-                  className="relative inline-block text-left"
-                >
-                  <div>
+                <div className="relative inline-block text-left">
+                  <div ref={refNavbar}>
                     <BiUser
                       className="text-5xl text-H_green rounded-full bg-white cursor-pointer"
                       onClick={onClickUser}

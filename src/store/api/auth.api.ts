@@ -4,15 +4,10 @@ import {
   createUserCredentials,
 } from "../../hooks/useAuthStore";
 
-const baseUrl = "http://localhost:8080/";
+const baseUrl = import.meta.env.VITE_API_URL;
 
-interface UserRes {
+export interface UserRes {
   token: string;
-  user: {
-    id: string;
-    username: string;
-    email: string;
-  };
 }
 
 export const authApi = createApi({
@@ -27,10 +22,10 @@ export const authApi = createApi({
       }),
     }),
     register: builder.mutation<UserRes, createUserCredentials>({
-      query: ({ email, password }: createUserCredentials) => ({
-        url: "/register",
+      query: ({ email, username, password }: createUserCredentials) => ({
+        url: "/user",
         method: "POST",
-        body: { email, password },
+        body: { email, username, password },
       }),
     }),
     recovery: builder.mutation<void, string>({

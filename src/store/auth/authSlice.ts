@@ -14,8 +14,8 @@ interface AuthSlice {
 const initialState: AuthSlice = {
   status: "unauthenticated",
   user: {
-    username: "x",
-    email: "x@gmail.com",
+    username: "",
+    email: "",
   },
   errorMessage: null,
 };

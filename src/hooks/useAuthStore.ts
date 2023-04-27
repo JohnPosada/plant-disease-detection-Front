@@ -1,8 +1,10 @@
+import jwtDecode from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
 import {
   useLoginMutation,
   useRecoveryMutation,
   useRegisterMutation,
+  UserRes,
 } from "../store/api/auth.api";
 import { login, loginError, logout } from "../store/auth/authSlice";
 import { AppDispatch, RootState } from "../store/store";
@@ -17,52 +19,35 @@ export interface createUserCredentials {
   password: string;
 }
 
+interface claims {
+  username: string;
+  email: string;
+}
+
 export const useAuthStore = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { status, user, errorMessage } = useSelector(
     (state: RootState) => state.auth
   );
-  const [onLogin, { isLoading, error: errorLogin, data: dataLogin }] =
-    useLoginMutation();
 
-  const [
-    onRegister,
-    { isLoading: isLoadingRegister, error: errorRegister, data: dataRegister },
-  ] = useRegisterMutation();
-
-  // const [onRecovery, { isLoading: isLoadingRecovery, error: errorRecovery }] =
-  //   useRecoveryMutation();
   const checkAuth = () => {
     const token = localStorage.getItem("token");
     if (!token) return dispatch(logout());
-    return dispatch(login({ username: "", email: "" }));
+    const user = jwtDecode<claims>(token);
+    return dispatch(login(user));
   };
 
-  const startLogin = async ({ email, password }: LoginUserCredentials) => {
-    await onLogin({ email, password });
-    const { token, user } = dataLogin ?? {};
-    console.log(user);
-
-    if (user && token) {
+  const startLogin = async (token: string) => {
+    if (token) {
+      const user = jwtDecode<claims>(token ?? "");
+      console.log(user);
       localStorage.setItem("token", token);
       return dispatch(login(user));
     }
-    return dispatch(loginError(errorLogin ?? "Error"));
   };
 
-  const startRegister = async ({
-    email,
-    username,
-    password,
-  }: createUserCredentials) => {
-    await onRegister({ email, username, password });
-    const { token, user } = dataRegister ?? {};
-
-    if (user && token) {
-      localStorage.setItem("token", token);
-      return dispatch(login(user));
-    }
-    return dispatch(loginError(errorRegister || "Error"));
+  const startLoginError = async (error: string) => {
+    return dispatch(loginError(error));
   };
 
   const startLogout = () => {
@@ -76,7 +61,7 @@ export const useAuthStore = () => {
     user,
     errorMessage,
     startLogin,
-    startRegister,
+    startLoginError,
     startLogout,
   };
 };
