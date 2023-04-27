@@ -5,9 +5,8 @@ import { useAuthStore } from "../hooks/useAuthStore";
 import { useGetPhotosQuery } from "../store/api/plant.api";
 
 export const HistorialPage = () => {
-  const { user } = useAuthStore();
-
-  const { data: photos, isLoading } = useGetPhotosQuery(user.username);
+  const { data: dataHistorial, isLoading } = useGetPhotosQuery();
+  const { data: photos } = dataHistorial ?? {};
 
   isLoading && <Spinner />;
 
