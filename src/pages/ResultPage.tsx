@@ -6,25 +6,25 @@ import { useAuthStore } from "../hooks/useAuthStore";
 import { useGetResultQuery } from "../store/api/plant.api";
 
 export const ResultPage = () => {
-  const { user } = useAuthStore();
   const [readMore, setReadMore] = useState(false);
-  const image = localStorage.getItem("imgURL") ?? "";
   const [isPolling, setIsPolling] = useState(true);
   const [isTimeout, setIsTimeout] = useState(false);
 
-  const { data } = useGetResultQuery(
-    "214313e7-100b-4298-9b2f-91c68da141f9.jpg",
-    { pollingInterval: isPolling ? 1000 : undefined }
-  );
+  const { user } = useAuthStore();
+  const photo_url = localStorage.getItem("photo_url") ?? "";
+  const googleUrl = import.meta.env.VITE_GOOGLE_URL;
+
+  const { data } = useGetResultQuery(photo_url, {
+    pollingInterval: isPolling ? 1000 : undefined,
+  });
   const { result } = data ?? {};
 
-  console.log(result);
-
   useEffect(() => {
-    if (result && result.accuracy !== null) setIsPolling(false);
+    if (result && result.accuracy !== "") setIsPolling(false);
 
     setTimeout(() => {
       setIsPolling(false);
+      if (!result) setIsTimeout(true);
     }, 10000);
   }, [result]);
 
@@ -55,7 +55,8 @@ export const ResultPage = () => {
 
   if (isPolling) return <Spinner />;
 
-  if (isTimeout) return notFoundResult();
+  if (isTimeout || (result && +result?.accuracy <= 0.75))
+    return notFoundResult();
 
   return (
     <div className="w-full p-10">
@@ -63,7 +64,11 @@ export const ResultPage = () => {
         Hi {user?.username}, this is your result:
       </h1>
       <div className="flex flex-col justify-center items-center">
-        <img className=" border-2 rounded-3xl mb-4" src={image ?? ""} alt="" />
+        <img
+          className=" border-2 rounded-3xl mb-4"
+          src={googleUrl + photo_url ?? ""}
+          alt=""
+        />
         <hr className="bg-H_green h-[2px] w-9/12 rounded-full" />
         <div className="flex flex-col justify-center mt-6 mb-3">
           <h1 className="text-4xl font-bold mb-2 text-H_green">

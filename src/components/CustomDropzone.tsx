@@ -12,8 +12,7 @@ export const CustomDropzone = () => {
     preview: "",
     path: "",
   });
-  const [uploadImage, { isLoading, isSuccess, isError, error }] =
-    useUploadImageMutation();
+  const [uploadImage, { isLoading, isError, error }] = useUploadImageMutation();
 
   const onDrop = (acceptedFiles: File[]) => {
     setUploadFile(acceptedFiles[0]);
@@ -34,11 +33,9 @@ export const CustomDropzone = () => {
 
   const onClickDiagnose = async (file: File | undefined) => {
     if (file) {
-      localStorage.setItem("imgURL", URL.createObjectURL(file));
-      const url = await uploadImage(file);
+      const { photo_url } = await uploadImage(file).unwrap();
+      localStorage.setItem("photo_url", photo_url);
       navigate(`/result`);
-
-      console.log(url);
     }
   };
 

@@ -1,14 +1,23 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const baseUrl = import.meta.env.VITE_API_URL;
+const baseUrl = import.meta.env.VITE_API_URL + "api/";
+
 interface Result {
   accuracy: string;
   photo_url: string;
   sickness: string;
 }
 
+interface HistorialResult {
+  data: Result[];
+}
+
 interface PlantResult {
   result: Result;
+}
+
+interface UploadImageResult {
+  photo_url: string;
 }
 
 export const plantApi = createApi({
@@ -26,24 +35,25 @@ export const plantApi = createApi({
   endpoints: (builder) => ({
     getResult: builder.query<PlantResult, string>({
       query: (url) => ({
-        url: `/api/result?photo_url=${url}`,
+        url: `results/${url}`,
         method: "GET",
       }),
     }),
-    uploadImage: builder.mutation<string, File>({
+    uploadImage: builder.mutation<UploadImageResult, File>({
       query: (file) => {
         const formData = new FormData();
         formData.append("uploads", file);
         return {
-          url: "/api/upload",
+          url: "photos",
           method: "POST",
           body: formData,
         };
       },
     }),
-    getPhotos: builder.query<Result[], string>({
-      query: (username) => ({
-        url: "/api/photos",
+    getPhotos: builder.query<HistorialResult, void>({
+      query: () => ({
+        url: "results",
+
         method: "GET",
       }),
     }),
