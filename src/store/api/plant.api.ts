@@ -13,7 +13,7 @@ interface HistorialResult {
 }
 
 interface PlantResult {
-  result: Result;
+  data: Result;
 }
 
 interface UploadImageResult {

@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { Spinner } from "../components/Spinner";
 import { useAuthStore } from "../hooks/useAuthStore";
 import { useGetResultQuery } from "../store/api/plant.api";
+import { deseasesDefinitions } from "../data/deseasesDefinitions";
 
 export const ResultPage = () => {
   const [readMore, setReadMore] = useState(false);
@@ -12,23 +13,24 @@ export const ResultPage = () => {
 
   const { user } = useAuthStore();
   const photo_url = localStorage.getItem("photo_url") ?? "";
-  const googleUrl = import.meta.env.VITE_GOOGLE_URL;
+  const googleUrl = import.meta.env.VITE_GOOGLE_STORAGE_URL;
 
-  const { data } = useGetResultQuery(photo_url, {
+  const { data: resultado } = useGetResultQuery(photo_url, {
     pollingInterval: isPolling ? 1000 : undefined,
   });
-  const { result } = data ?? {};
+  const { data } = resultado ?? {};
+  console.log(googleUrl);
 
   useEffect(() => {
-    if (result && result.accuracy !== "") setIsPolling(false);
+    if (data && data.accuracy !== "") setIsPolling(false);
 
     setTimeout(() => {
       setIsPolling(false);
-      if (!result) setIsTimeout(true);
+      if (!data) setIsTimeout(true);
     }, 10000);
-  }, [result]);
+  }, [data]);
 
-  if (!setIsPolling && result && result.accuracy !== null) setIsTimeout(true);
+  if (!setIsPolling && data && data.accuracy !== null) setIsTimeout(true);
 
   const handleReadMore = () => {
     setReadMore(!readMore);
@@ -55,8 +57,7 @@ export const ResultPage = () => {
 
   if (isPolling) return <Spinner />;
 
-  if (isTimeout || (result && +result?.accuracy <= 0.75))
-    return notFoundResult();
+  if (isTimeout || (data && +data?.accuracy <= 0.75)) return notFoundResult();
 
   return (
     <div className="w-full p-10">
@@ -72,21 +73,22 @@ export const ResultPage = () => {
         <hr className="bg-H_green h-[2px] w-9/12 rounded-full" />
         <div className="flex flex-col justify-center mt-6 mb-3">
           <h1 className="text-4xl font-bold mb-2 text-H_green">
-            {result?.sickness.replaceAll("_", " ") ?? ""}
+            {data?.sickness.replaceAll("_", " ") ?? ""}
           </h1>
-          <p
-            className={`text-lg text-H_brown text-center ${
-              readMore ? "" : "line-clamp-3"
-            }`}
-          >
-            Sit do amet id pariatur commodo. Pariatur esse Lorem elit eu
-            incididunt cillum culpa aliqua ipsum est. Non elit dolor nisi Lorem
-            laboris excepteur commodo ea mollit in officia incididunt fugiat.
-            Consectetur irure consectetur officia in quis incididunt quis
-            incididunt aliquip incididunt nostrud magna fugiat commodo. Proident
-            est duis ea laborum. Dolore nostrud et cillum sint id dolore et quis
-            aliquip eiusmod esse magna laborum incididunt.
-          </p>
+          {data &&
+            deseasesDefinitions.map((desease) => {
+              if (desease.name === data?.sickness) {
+                return (
+                  <p
+                    className={`text-lg text-H_brown text-center ${
+                      readMore ? "" : "line-clamp-3"
+                    }`}
+                  >
+                    {desease.description}
+                  </p>
+                );
+              }
+            })}
           <div className="flex justify-center py-2">
             {readMore ? (
               <div
