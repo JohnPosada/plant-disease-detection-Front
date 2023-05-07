@@ -19,18 +19,15 @@ export const ResultPage = () => {
     pollingInterval: isPolling ? 1000 : undefined,
   });
   const { data } = resultado ?? {};
-  console.log(googleUrl);
 
   useEffect(() => {
     if (data && data.accuracy !== "") setIsPolling(false);
 
     setTimeout(() => {
       setIsPolling(false);
-      if (!data) setIsTimeout(true);
+      if (data && data.accuracy === "" && !isPolling) setIsTimeout(true);
     }, 10000);
   }, [data]);
-
-  if (!setIsPolling && data && data.accuracy !== null) setIsTimeout(true);
 
   const handleReadMore = () => {
     setReadMore(!readMore);
@@ -57,7 +54,7 @@ export const ResultPage = () => {
 
   if (isPolling) return <Spinner />;
 
-  if (isTimeout || (data && +data?.accuracy <= 0.75)) return notFoundResult();
+  if (isTimeout || (data && +data?.accuracy <= 75)) return notFoundResult();
 
   return (
     <div className="w-full p-10">

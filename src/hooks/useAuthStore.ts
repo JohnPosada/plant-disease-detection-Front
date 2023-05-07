@@ -40,7 +40,6 @@ export const useAuthStore = () => {
   const startLogin = async (token: string) => {
     if (token) {
       const user = jwtDecode<claims>(token ?? "");
-      console.log(user);
       localStorage.setItem("token", token);
       return dispatch(login(user));
     }
