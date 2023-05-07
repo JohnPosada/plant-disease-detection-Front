@@ -1,12 +1,39 @@
 import { Form, Formik } from "formik";
 import { IoChevronBackCircle } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import * as Yup from "yup";
 import { InputText } from "../../components/InputText";
 import { inputFieldsForgotPassword } from "../../data/inputFields";
+import { useRecoveryMutation } from "../../store/api/auth.api";
 
 export const RecoveryPage = () => {
   const navigate = useNavigate();
+  const [onRecovery, { isLoading }] = useRecoveryMutation();
+
+  const successAlert = () => {
+    Swal.fire({
+      icon: "success",
+      title: "Success",
+      text: "Email sent successfully",
+      confirmButtonText: "ok",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate("/login");
+      }
+    });
+  };
+
+  const handleRecovery = async (email: string) => {
+    try {
+      const res = await onRecovery(email);
+      successAlert();
+      navigate("/login");
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="rounded-lg border-2 px-6 py-4 border-gray-200 w-2/5">
@@ -21,8 +48,8 @@ export const RecoveryPage = () => {
         initialValues={{
           email: "",
         }}
-        onSubmit={(values) => {
-          console.log(values);
+        onSubmit={({ email }) => {
+          handleRecovery(email);
         }}
         validationSchema={Yup.object({
           email: Yup.string()
@@ -30,7 +57,7 @@ export const RecoveryPage = () => {
             .email("Email is invalid"),
         })}
       >
-        {(formik: any) => (
+        {() => (
           <Form>
             <div className="flex-row space-y-4">
               {inputFieldsForgotPassword.map((inputField) => (
