@@ -57,8 +57,21 @@ export const plantApi = createApi({
         method: "GET",
       }),
     }),
+    resetPassword: builder.mutation<void, string>({
+      query: (new_password) => ({
+        url: "password-reset",
+        method: "POST",
+        body: {
+          new_password,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetResultQuery, useUploadImageMutation, useGetPhotosQuery } =
-  plantApi;
+export const {
+  useGetResultQuery,
+  useUploadImageMutation,
+  useGetPhotosQuery,
+  useResetPasswordMutation,
+} = plantApi;
