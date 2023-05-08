@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
+import HojaPort from "../assets/images/HojaPort.png";
 
 export const LandingView = () => {
   const navigate = useNavigate();
@@ -11,11 +12,7 @@ export const LandingView = () => {
           Welcome to plant care app!
         </h1>
         <div className="flex align-center justify-center w-2/3">
-          <img
-            className="w-full h-full"
-            src="/src/assets/images/HojaPort.png"
-            alt="plant"
-          />
+          <img className="w-full h-full" src={HojaPort} alt="plant" />
         </div>
         <p className="text-H_brown max-w-7xl text-center text-xl p-4">
           Welcome to our website, dedicated to helping you detect diseases in
