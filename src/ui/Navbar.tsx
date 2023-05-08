@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { BiUser } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
+
 import { useAuthStore } from "../hooks/useAuthStore";
 import { logout } from "../store/auth/authSlice";
+import Logo from "../assets/images/Logo.png";
 
 export const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
@@ -70,7 +72,7 @@ export const Navbar = () => {
       <div className="bg-H_coffee w-full h-full ">
         <div className="flex justify-between px-8 h-full items-center align-center">
           <img
-            src="/src/assets/images/Logo.png"
+            src={Logo}
             onClick={() => {
               navigation("/");
             }}
