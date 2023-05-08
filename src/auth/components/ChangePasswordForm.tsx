@@ -1,6 +1,11 @@
 import { Form, Formik } from "formik";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import * as Yup from "yup";
 import { InputText } from "../../components/InputText";
 import { inputFieldsChangePassword } from "../../data/inputFields";
@@ -11,7 +16,12 @@ import Swal from "sweetalert2";
 export const ChangePasswordForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const [onResetPassword, { isLoading }] = useResetPasswordMutation();
+  const [onResetPassword] = useResetPasswordMutation();
+  const [params] = useSearchParams();
+  const token = params.get("token");
+  if (token) {
+    localStorage.setItem("token", token);
+  }
 
   const successAlert = () => {
     Swal.fire({
@@ -29,7 +39,6 @@ export const ChangePasswordForm = () => {
     try {
       await onResetPassword(password);
       successAlert();
-      console.log("reset password", password);
     } catch (error) {
       console.log(error);
     }
@@ -39,7 +48,13 @@ export const ChangePasswordForm = () => {
     setShowPassword(!showPassword);
   };
   return (
-    <>
+    <div
+      className={`${
+        !!token
+          ? "w-1/2 rounded-lg border-2 px-6 py-4 border-gray-200 shadow-lg"
+          : ""
+      }`}
+    >
       <h1 className="mb-2 text-2xl font-medium text-label">Change password</h1>
       <Formik
         initialValues={{
@@ -100,6 +115,6 @@ export const ChangePasswordForm = () => {
           </Form>
         )}
       </Formik>
-    </>
+    </div>
   );
 };
