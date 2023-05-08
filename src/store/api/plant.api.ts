@@ -59,7 +59,7 @@ export const plantApi = createApi({
     }),
     resetPassword: builder.mutation<void, string>({
       query: (new_password) => ({
-        url: "password-reset",
+        url: "password_reset",
         method: "POST",
         body: {
           new_password,

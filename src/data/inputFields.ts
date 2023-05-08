@@ -54,12 +54,6 @@ export const inputFieldsForgotPassword: InputField[] = [
 
 export const inputFieldsChangePassword: InputField[] = [
   {
-    name: "oldPassword",
-    label: "Old password",
-    type: "password",
-    placeholder: "Enter your old password",
-  },
-  {
     name: "newPassword",
     label: "New password",
     type: "password",

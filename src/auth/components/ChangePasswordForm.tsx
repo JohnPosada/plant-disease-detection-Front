@@ -5,9 +5,35 @@ import * as Yup from "yup";
 import { InputText } from "../../components/InputText";
 import { inputFieldsChangePassword } from "../../data/inputFields";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { useResetPasswordMutation } from "../../store/api/plant.api";
+import Swal from "sweetalert2";
 
 export const ChangePasswordForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const [onResetPassword, { isLoading }] = useResetPasswordMutation();
+
+  const successAlert = () => {
+    Swal.fire({
+      icon: "success",
+      title: "Success",
+      text: "Your password has been changed",
+      confirmButtonText: "ok",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate("/");
+      }
+    });
+  };
+  const handleResetPassword = async (password: string) => {
+    try {
+      await onResetPassword(password);
+      successAlert();
+      console.log("reset password", password);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -17,15 +43,13 @@ export const ChangePasswordForm = () => {
       <h1 className="mb-2 text-2xl font-medium text-label">Change password</h1>
       <Formik
         initialValues={{
-          oldPassword: "",
           newPassword: "",
           confirmPassword: "",
         }}
-        onSubmit={(values) => {
-          console.log(values);
+        onSubmit={async ({ newPassword }) => {
+          handleResetPassword(newPassword);
         }}
         validationSchema={Yup.object({
-          oldPassword: Yup.string().required("Old password is required"),
           newPassword: Yup.string()
             .required("New password is required")
             .min(6, "Password must be at least 6 characters")
@@ -46,25 +70,17 @@ export const ChangePasswordForm = () => {
                     {...inputField}
                     hidden={showPassword}
                   />
-                  {inputField.name === "oldPassword" && showPassword && (
+                  {inputField.name === "newPassword" && showPassword && (
                     <AiFillEye
                       onClick={toggleShowPassword}
                       className="self-end relative -left-2 text-xl mt-2"
                     />
-                    // <AiFillEye
-                    //   onClick={toggleShowPassword}
-                    //   className="self-end sm:self-end sm:absolute sm:bottom-[16.3rem] sm:left-[28.5rem] relative -left-2 text-xl"
-                    // />
                   )}
-                  {inputField.name === "oldPassword" && !showPassword && (
+                  {inputField.name === "newPassword" && !showPassword && (
                     <AiFillEyeInvisible
                       onClick={toggleShowPassword}
                       className="self-end relative -left-2 text-xl mt-2"
                     />
-                    // <AiFillEyeInvisible
-                    //   onClick={toggleShowPassword}
-                    //   className="self-end relative -top-11 -left-2 text-xl"
-                    // />
                   )}
                 </div>
               ))}
