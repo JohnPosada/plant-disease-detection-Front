@@ -23,14 +23,14 @@ export const authApi = createApi({
     }),
     register: builder.mutation<UserRes, createUserCredentials>({
       query: ({ email, username, password }: createUserCredentials) => ({
-        url: "/user",
+        url: "/users",
         method: "POST",
         body: { email, username, password },
       }),
     }),
     recovery: builder.mutation<void, string>({
       query: (email) => ({
-        url: "/recovery",
+        url: "/password_recovery",
         method: "POST",
         body: { email },
       }),
