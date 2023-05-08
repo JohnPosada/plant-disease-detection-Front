@@ -48,7 +48,7 @@ export const RecoveryPage = () => {
         initialValues={{
           email: "",
         }}
-        onSubmit={({ email }) => {
+        onSubmit={async ({ email }) => {
           handleRecovery(email);
         }}
         validationSchema={Yup.object({
