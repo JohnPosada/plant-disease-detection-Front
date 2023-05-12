@@ -36,6 +36,13 @@ export const CustomDropzone = () => {
       const { photo_url } = await uploadImage(file).unwrap();
       localStorage.setItem("photo_url", photo_url);
       navigate(`/result`);
+
+      // const res = await uploadImage(file).unwrap();
+      // console.log(error);
+      //
+      // console.log(res);
+      //
+      // navigate(`/result`);
     }
   };
 
