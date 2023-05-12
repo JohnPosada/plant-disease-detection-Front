@@ -19,10 +19,6 @@ export const ChangePasswordForm = () => {
   const [onResetPassword] = useResetPasswordMutation();
   const [params] = useSearchParams();
   const token = params.get("token");
-  if (token) {
-    localStorage.setItem("token", token);
-  }
-
   const successAlert = () => {
     Swal.fire({
       icon: "success",
