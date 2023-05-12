@@ -10,7 +10,7 @@ export default () => {
     <div className="flex place-items-center justify-center h-full">
       <Routes>
         <Route path="/" element={<LandingView />} />
-        <Route path="/resetPassword" element={<ChangePasswordForm />} />"
+        <Route path="/reset-password" element={<ChangePasswordForm />} />"
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/recovery" element={<RecoveryPage />} />
