@@ -19,7 +19,7 @@ export const ResultPreview = ({
           src={googleUrl + photo_url}
           alt="Plant"
         />
-        {+accuracy <= 0.5 ? (
+        {+accuracy <= 0.75 ? (
           <p className="text-center text-H_white text-xl mt-3">
             Not found result
           </p>
