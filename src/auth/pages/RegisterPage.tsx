@@ -36,10 +36,10 @@ export const RegisterPage = () => {
           onClickRegister(values);
         }}
         validationSchema={Yup.object({
-          username: Yup.string().required("Email is required"),
+          username: Yup.string().required("Username is required"),
 
           email: Yup.string()
-            .required("Password is required")
+            .required("Email is required")
             .email("Email is invalid"),
 
           password: Yup.string()
